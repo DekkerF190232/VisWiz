@@ -2,8 +2,9 @@
     <!-- Base application theme. -->
     <style name="Base.Theme.VisWiz" parent="Theme.Material3.DayNight.NoActionBar">
         <!-- Customize your light theme here. -->
-        <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
+        <item name="colorPrimary">#303030</item>
+        <item name="colorSurface">#08000000</item>
+        <item name="colorSurfaceVariant">#20000000</item>
     </style>
-
     <style name="Theme.VisWiz" parent="Base.Theme.VisWiz" />
 </resources>
