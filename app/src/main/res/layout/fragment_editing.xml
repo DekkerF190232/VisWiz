@@ -20,7 +20,7 @@
             android:id="@+id/text_edit_title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="#10000000"
+            android:background="#20000000"
             android:gravity="center"
             android:padding="5dp"
             android:text="New Algorithm"

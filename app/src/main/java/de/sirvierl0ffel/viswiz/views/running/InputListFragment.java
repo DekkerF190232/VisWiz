@@ -11,6 +11,7 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -34,7 +35,13 @@ public class InputListFragment extends Fragment {
 
         MainViewModel model = new ViewModelProvider(requireActivity()).get(MainViewModel.class);
         Algorithm algorithm = model.selectedAlgorithm.getValue();
-        List<InputSave> inputList = model.managerInputs.getInputs(algorithm);
+
+        if (algorithm == null) throw new IllegalStateException();
+
+        List<InputSave> inputList = algorithm.id == -1 ?
+                new ArrayList<InputSave>() {{
+                    add(algorithm.defaultInput);
+                }} : model.managerInputs.getInputs(algorithm);
 
         binding.list.setLayoutManager(new LinearLayoutManager(binding.getRoot().getContext()));
         binding.list.setAdapter(new InputListItemAdapter(inputList, (AppCompatActivity) requireActivity()));

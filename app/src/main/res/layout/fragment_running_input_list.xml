@@ -34,13 +34,13 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="Input Definition"
+                android:textColorHint="#0000ff"
                 app:expandedHintEnabled="false">
 
                 <EditText
                     android:id="@+id/text_algorithm_input"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:ems="10"
                     android:gravity="start|top"
                     android:inputType="textMultiLine"
                     android:lines="8"

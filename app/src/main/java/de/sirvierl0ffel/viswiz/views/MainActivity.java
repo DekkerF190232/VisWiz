@@ -1,9 +1,9 @@
 package de.sirvierl0ffel.viswiz.views;
 
+import android.os.Bundle;
+
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
-
-import android.os.Bundle;
 
 import de.sirvierl0ffel.viswiz.R;
 import de.sirvierl0ffel.viswiz.databinding.ActivityMainBinding;

@@ -26,7 +26,6 @@ import java.util.stream.Collectors;
 import de.sirvierl0ffel.viswiz.algorithm.Evaluater;
 import de.sirvierl0ffel.viswiz.algorithm.Result;
 import de.sirvierl0ffel.viswiz.algorithm.ResultStep;
-import de.sirvierl0ffel.viswiz.databinding.FragmentRunningBinding;
 import de.sirvierl0ffel.viswiz.databinding.FragmentRunningResultsBinding;
 import de.sirvierl0ffel.viswiz.models.Algorithm;
 import de.sirvierl0ffel.viswiz.models.InputSave;
@@ -84,7 +83,8 @@ public class ResultFragment extends Fragment {
                 this::setProgress,
                 this::setResult,
                 this::setError,
-                () -> {});
+                () -> {
+                });
     }
 
     public void setResult(Result result) {
@@ -92,8 +92,8 @@ public class ResultFragment extends Fragment {
         binding.layoutLoading.setVisibility(View.GONE);
 
         if (this.result != null && stepIndex < this.result.stepList.size()) {
-            binding.layoutCode.getChildAt(this.result.stepList.get(stepIndex).pseudoCodeIndex)
-                    .setBackground(null);
+            View v = binding.layoutCode.getChildAt(this.result.stepList.get(stepIndex).pseudoCodeIndex);
+            if (v != null) v.setBackground(null);
         }
         stepIndex = 0;
 
@@ -127,7 +127,8 @@ public class ResultFragment extends Fragment {
             case RUNNING:
                 stageString = "Running";
                 break;
-            default: throw new UnsupportedOperationException(stage.toString());
+            default:
+                throw new UnsupportedOperationException(stage.toString());
         }
         binding.textLoading.setText(stageString);
         binding.progressBar.setProgress((int) (progress * 100));
@@ -198,6 +199,7 @@ public class ResultFragment extends Fragment {
     public void onPause() {
         super.onPause();
         timer.cancel();
+        Evaluater.instance.cancel();
     }
 
     private void step(int index) {

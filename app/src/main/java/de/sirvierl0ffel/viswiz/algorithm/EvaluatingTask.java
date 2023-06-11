@@ -3,6 +3,7 @@ package de.sirvierl0ffel.viswiz.algorithm;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.OptIn;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
@@ -16,7 +17,9 @@ import java.util.Map;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 
+import app.cash.zipline.EngineApi;
 import app.cash.zipline.QuickJs;
+import app.cash.zipline.internal.bridge.CallChannel;
 import de.sirvierl0ffel.viswiz.models.Algorithm;
 import de.sirvierl0ffel.viswiz.models.InputSave;
 
@@ -49,11 +52,12 @@ public class EvaluatingTask implements Runnable {
     }
 
     @Override
+    @EngineApi
     public void run() {
         post.accept(() -> progress.accept(0f, Evaluater.Stage.RUNNING));
 
         try (QuickJs engine = QuickJs.create()) {
-            engine.setMemoryLimit(500_000_000L);
+            engine.setMemoryLimit(100_000_000L);
             engine.setInterruptHandler(this::isCanceled);
             engineRegisterFunctions(engine, post, progress);
             engine.evaluate(input.input, "input.js");
@@ -67,15 +71,10 @@ public class EvaluatingTask implements Runnable {
         if (!isCanceled()) post.accept(over);
     }
 
+    @EngineApi
     private void engineRegisterFunctions(QuickJs engine, Consumer<Runnable> mainRunner, BiConsumer<Float, Evaluater.Stage> progress) {
         //noinspection KotlinInternalInJava
-        engine.initOutboundChannel$zipline_release(new app.cash.zipline.internal.bridge.CallChannel() {
-            @NonNull
-            @Override
-            public String[] serviceNamesArray() {
-                return new String[]{};
-            }
-
+        engine.initOutboundChannel$zipline_release(new CallChannel() {
             @NonNull
             @Override
             public String call(@NonNull String s) {
@@ -122,7 +121,7 @@ public class EvaluatingTask implements Runnable {
             String message = jsonStep.has("m") ? jsonStep.get("m").getAsString() : null;
             list.add(new ResultStep(variables, pseudoCodeIndex, message));
             mainRunner.accept(() -> progress.accept((float) list.size() / jsonSteps.size(), Evaluater.Stage.PARSING));
-            if (isCanceled()) throw new Evaluater.ParseInterruptedException("cancelled while parsing");
+            if (isCanceled()) throw new Evaluater.ParseInterruptedException("Cancelled while parsing");
         }
         return new Result(list);
     }

@@ -33,6 +33,8 @@ public class RunningFragment extends Fragment {
 
         FragmentRunningBinding binding = FragmentRunningBinding.inflate(inflater, container, false);
 
+        binding.textRunningTesting.setVisibility(algorithm.id == -1 ? View.VISIBLE : View.GONE);
+
         binding.textAlgorithmName.setText(algorithm.name);
         binding.viewPager.setAdapter(new FragmentStateAdapter(requireActivity()) {
             @NonNull
@@ -57,6 +59,7 @@ public class RunningFragment extends Fragment {
                 Objects.requireNonNull(binding.tabLayout.getTabAt(position)).select();
             }
         });
+        binding.viewPager.setOffscreenPageLimit(AlgorithmViewModel.TAB_FRAGMENT_TYPES.length);
         binding.tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {

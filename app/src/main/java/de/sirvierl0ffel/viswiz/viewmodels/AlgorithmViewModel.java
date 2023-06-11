@@ -6,8 +6,8 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import de.sirvierl0ffel.viswiz.models.InputSave;
-import de.sirvierl0ffel.viswiz.views.running.InputListFragment;
 import de.sirvierl0ffel.viswiz.views.running.DescriptionFragment;
+import de.sirvierl0ffel.viswiz.views.running.InputListFragment;
 import de.sirvierl0ffel.viswiz.views.running.ResultFragment;
 
 public class AlgorithmViewModel extends ViewModel {

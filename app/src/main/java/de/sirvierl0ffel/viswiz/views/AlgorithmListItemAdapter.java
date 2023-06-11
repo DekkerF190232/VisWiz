@@ -1,26 +1,31 @@
 package de.sirvierl0ffel.viswiz.views;
 
-import androidx.annotation.NonNull;
-import androidx.recyclerview.widget.RecyclerView;
-
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
-import com.squareup.picasso.Picasso;
+import androidx.annotation.NonNull;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.lifecycle.ViewModelStoreOwner;
+import androidx.recyclerview.widget.RecyclerView;
 
-import de.sirvierl0ffel.viswiz.databinding.FragmentAlgorithmListItemBinding;
-import de.sirvierl0ffel.viswiz.views.running.RunningFragment;
-import de.sirvierl0ffel.viswiz.models.Algorithm;
-import de.sirvierl0ffel.viswiz.viewmodels.MainViewModel;
+import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
+import de.sirvierl0ffel.viswiz.databinding.FragmentAlgorithmListItemBinding;
+import de.sirvierl0ffel.viswiz.models.Algorithm;
+import de.sirvierl0ffel.viswiz.viewmodels.AlgorithmViewModel;
+import de.sirvierl0ffel.viswiz.viewmodels.MainViewModel;
+import de.sirvierl0ffel.viswiz.views.running.RunningFragment;
+
 public class AlgorithmListItemAdapter extends RecyclerView.Adapter<AlgorithmListItemAdapter.ViewHolder> {
 
+    private final ViewModelStoreOwner activity;
     private final List<Algorithm> algorithms;
     private final MainViewModel model;
 
-    public AlgorithmListItemAdapter(MainViewModel model, List<Algorithm> items) {
+    public AlgorithmListItemAdapter(ViewModelStoreOwner activity, MainViewModel model, List<Algorithm> items) {
+        this.activity = activity;
         this.model = model;
         algorithms = items;
     }
@@ -57,6 +62,8 @@ public class AlgorithmListItemAdapter extends RecyclerView.Adapter<AlgorithmList
             this.binding = binding;
             binding.getRoot().setOnClickListener(v -> {
                 if (algorithm == null) return;
+                AlgorithmViewModel algorithmModel = new ViewModelProvider(activity).get(AlgorithmViewModel.class);
+                algorithmModel.selectedInput.setValue(algorithm.defaultInput);
                 model.selectedAlgorithm.setValue(algorithm);
                 model.open(RunningFragment.class);
             });

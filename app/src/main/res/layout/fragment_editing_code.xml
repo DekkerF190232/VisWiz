@@ -20,26 +20,28 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="Pseudo Code"
+            android:textColorHint="#0000ff"
             app:expandedHintEnabled="false">
 
             <EditText
-
                 android:id="@+id/txt_edit_pseudo_code"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:minLines="2"
-                android:ems="10"
                 android:gravity="top"
                 android:inputType="textMultiLine"
-                android:typeface="monospace"/>
+                android:minLines="2"
+                android:text="\\k{let} \\a{i} = \\v{0}&#10;\\k{while} \\a{i} &lt; \\a{n}&#10;&#9;\\a{i}++"
+                android:textSize="12sp"
+                android:typeface="monospace" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="1"
             android:layout_marginTop="5dp"
+            android:layout_weight="1"
             android:hint="JavaScript Code"
+            android:textColorHint="#0000ff"
             app:expandedHintEnabled="false">
 
             <EditText
@@ -47,27 +49,30 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_marginTop="6dp"
-                android:ems="10"
                 android:gravity="top"
                 android:inputType="textMultiLine"
+                android:text="(function() {&#10;&#9;let steps = [];&#10;&#9;&#10;&#9;let i = 0;&#10;&#9;&#10;&#9;steps.push({ v: { n, i }, i: 0 });&#10;&#9;&#10;&#9;do {&#10;&#9;&#9;steps.push({ v: { n, i }, i: 1 });&#10;&#9;&#9;&#10;&#9;&#9;if (i == n) break;&#10;&#9;&#9;&#10;&#9;&#9;i++;&#10;&#9;&#9;&#10;&#9;&#9;steps.push({ v: { n, i }, i: 2 });&#10;&#9;} while (true) ;&#10;&#9;&#10;&#9;steps.push({ v: { n, i }, i: -1 });&#10;&#9;&#10;&#9;return JSON.stringify( { steps } );&#10;})();"
+                android:textSize="12sp"
                 android:typeface="monospace" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
             android:hint="Default Input"
+            android:textColorHint="#0000ff"
             app:expandedHintEnabled="false">
 
             <EditText
                 android:id="@+id/txt_edit_input_example"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:minLines="2"
-                android:ems="10"
                 android:gravity="top"
                 android:inputType="textMultiLine"
-                android:typeface="monospace"/>
+                android:text="let n = 5"
+                android:textSize="12sp"
+                android:typeface="monospace" />
         </com.google.android.material.textfield.TextInputLayout>
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -34,7 +34,7 @@ android {
 }
 
 dependencies {
-    implementation 'app.cash.zipline:zipline-android:0.9.18'
+    implementation 'app.cash.zipline:zipline-android:0.9.20'
 
     implementation 'com.google.code.gson:gson:2.10.1'
     implementation 'com.squareup.picasso:picasso:2.8'

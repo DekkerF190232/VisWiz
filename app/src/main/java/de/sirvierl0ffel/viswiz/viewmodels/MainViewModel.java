@@ -4,8 +4,8 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-import de.sirvierl0ffel.viswiz.models.Algorithm;
 import de.sirvierl0ffel.viswiz.data.InputSaveManager;
+import de.sirvierl0ffel.viswiz.models.Algorithm;
 
 public class MainViewModel extends ViewModel {
 

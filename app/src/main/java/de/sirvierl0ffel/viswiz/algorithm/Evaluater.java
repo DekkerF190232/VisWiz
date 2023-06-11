@@ -44,6 +44,10 @@ public class Evaluater {
         exec.execute(lastTask);
     }
 
+    public void cancel() {
+        if (lastTask != null) lastTask.cancel();
+    }
+
     public enum Stage {
         WAITING, // Waiting for canceled tasks to complete execution
         RUNNING, // Running the javascript code

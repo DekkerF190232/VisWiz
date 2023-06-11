@@ -18,6 +18,13 @@ public class EditViewModel extends ViewModel {
     private final MutableLiveData<Integer> _tab = new MutableLiveData<>(0);
     public final LiveData<Integer> tab = _tab;
 
+    public String name = "";
+    public String thumbnailURL = "";
+    public String description = "";
+    public String pseudoCode = "";
+    public String code = "";
+    public String input = "";
+
     public void selectTab(Class<? extends Fragment> fragment) {
         for (int i = 0; i < TAB_FRAGMENT_TYPES.length; i++) {
             if (fragment.equals(TAB_FRAGMENT_TYPES[i])) {
