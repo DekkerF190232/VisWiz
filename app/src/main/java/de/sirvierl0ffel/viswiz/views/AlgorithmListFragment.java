@@ -16,6 +16,7 @@ import android.view.ViewGroup;
 import de.sirvierl0ffel.viswiz.databinding.FragmentAlgorithmListBinding;
 import de.sirvierl0ffel.viswiz.models.Algorithm;
 import de.sirvierl0ffel.viswiz.viewmodels.MainViewModel;
+import de.sirvierl0ffel.viswiz.views.editing.EditingFragment;
 
 public class AlgorithmListFragment extends Fragment {
 
@@ -57,6 +58,12 @@ public class AlgorithmListFragment extends Fragment {
         }
         MainViewModel model = new ViewModelProvider(requireActivity()).get(MainViewModel.class);
         view.setAdapter(new AlgorithmListItemAdapter(model, Algorithm.DUMMY));
+
+        binding.buttonNewAlgorithm.setOnClickListener(v -> {
+            model.selectedAlgorithm.setValue(null);
+            model.open(EditingFragment.class);
+        });
+
         return binding.getRoot();
     }
 }

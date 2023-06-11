@@ -5,10 +5,14 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
+import de.sirvierl0ffel.viswiz.views.editing.CodeFragment;
+import de.sirvierl0ffel.viswiz.views.editing.InformationFragment;
+
 public class EditViewModel extends ViewModel {
 
     public static final Class<?>[] TAB_FRAGMENT_TYPES = new Class[]{
-            // TODO
+            InformationFragment.class,
+            CodeFragment.class
     };
 
     private final MutableLiveData<Integer> _tab = new MutableLiveData<>(0);

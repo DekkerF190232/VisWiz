@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".views.editing.InformationFragment">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_margin="10dp"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Name"
+            app:expandedHintEnabled="false">
+
+            <EditText
+                android:id="@+id/txt_edit_name"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="6dp"
+                android:ems="10"
+                android:gravity="top"
+                android:inputType="text"
+                android:text="Example"/>
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Thumbnail URL"
+            app:expandedHintEnabled="false">
+
+            <EditText
+                android:id="@+id/txt_edit_img_url"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="6dp"
+                android:ems="10"
+                android:gravity="top"
+                android:inputType="textUri"
+                android:text="https://i.imgur.com/nUzw5WH.jpeg" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:layout_marginTop="5dp"
+            android:hint="Description"
+            app:expandedHintEnabled="false">
+
+            <EditText
+                android:id="@+id/txt_edit_description"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="6dp"
+                android:ems="10"
+                android:gravity="top"
+                android:inputType="textMultiLine"
+                android:typeface="monospace"
+                android:text="\\h{Input}&#10;&#9;\\a{n}: Array of unsorted numbers.&#10;&#10;\\h{Output}&#10;&#9;No output.&#10;&#10;\\h{Description}&#10;&#9;Example algorithm."/>
+        </com.google.android.material.textfield.TextInputLayout>
+    </LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

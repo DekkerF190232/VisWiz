@@ -68,4 +68,8 @@ public class InputSaveManager {
         });
     }
 
+    public void clearInputs(Algorithm algorithm) {
+        inputs.remove(algorithm);
+    }
+
 }

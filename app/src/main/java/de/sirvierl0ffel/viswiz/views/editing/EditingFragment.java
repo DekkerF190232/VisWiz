@@ -16,10 +16,7 @@ import com.google.android.material.tabs.TabLayout;
 import java.util.Objects;
 
 import de.sirvierl0ffel.viswiz.databinding.FragmentEditingBinding;
-import de.sirvierl0ffel.viswiz.models.Algorithm;
-import de.sirvierl0ffel.viswiz.viewmodels.AlgorithmViewModel;
 import de.sirvierl0ffel.viswiz.viewmodels.EditViewModel;
-import de.sirvierl0ffel.viswiz.viewmodels.MainViewModel;
 import de.sirvierl0ffel.viswiz.views.running.DescriptionFragment;
 
 public class EditingFragment extends Fragment {
@@ -28,18 +25,14 @@ public class EditingFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         FragmentEditingBinding binding = FragmentEditingBinding.inflate(inflater, container, false);
 
-        MainViewModel model = new ViewModelProvider(requireActivity()).get(MainViewModel.class);
-
-        EditViewModel algorithmModel = new ViewModelProvider(requireActivity()).get(EditViewModel.class);
-        Algorithm algorithm = model.selectedAlgorithm.getValue();
-        if (algorithm == null) throw new IllegalStateException();
+        EditViewModel editModel = new ViewModelProvider(requireActivity()).get(EditViewModel.class);
 
         binding.pagerEdit.setAdapter(new FragmentStateAdapter(requireActivity()) {
             @NonNull
             @Override
             public Fragment createFragment(int position) {
                 try {
-                    return (Fragment) AlgorithmViewModel.TAB_FRAGMENT_TYPES[position].newInstance();
+                    return (Fragment) EditViewModel.TAB_FRAGMENT_TYPES[position].newInstance();
                 } catch (Exception e) {
                     return new DescriptionFragment();
                 }
@@ -47,7 +40,7 @@ public class EditingFragment extends Fragment {
 
             @Override
             public int getItemCount() {
-                return AlgorithmViewModel.TAB_FRAGMENT_TYPES.length;
+                return EditViewModel.TAB_FRAGMENT_TYPES.length;
             }
         });
         binding.pagerEdit.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
@@ -72,14 +65,14 @@ public class EditingFragment extends Fragment {
             }
         });
 
-        algorithmModel.tab.observe(getViewLifecycleOwner(), tabIdx ->
+        editModel.tab.observe(getViewLifecycleOwner(), tabIdx ->
         {
             TabLayout.Tab tab = Objects.requireNonNull(binding.tabsEdit.getTabAt(tabIdx));
             tab.select();
         });
 
         //noinspection unchecked
-        algorithmModel.selectTab((Class<? extends Fragment>) EditViewModel.TAB_FRAGMENT_TYPES[0]);
+        editModel.selectTab((Class<? extends Fragment>) EditViewModel.TAB_FRAGMENT_TYPES[0]);
 
         return binding.getRoot();
     }
