@@ -1,15 +1,19 @@
 package de.sirvierl0ffel.viswiz.views.editing;
 
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
 import java.util.Arrays;
+import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
 import de.sirvierl0ffel.viswiz.databinding.FragmentEditingCodeBinding;
@@ -35,24 +39,28 @@ public class CodeFragment extends Fragment {
 
         EditViewModel em = new ViewModelProvider(requireActivity()).get(EditViewModel.class);
 
-        binding.txtEditPseudoCode.setOnEditorActionListener((v, action, evt) -> {
-            em.pseudoCode = binding.txtEditPseudoCode.getText().toString();
-            return false;
-        });
-        em.pseudoCode = binding.txtEditPseudoCode.getText().toString();
-
-        binding.txtEditCode.setOnEditorActionListener((v, action, evt) -> {
-            em.code = binding.txtEditCode.getText().toString();
-            return false;
-        });
-        em.code = binding.txtEditCode.getText().toString();
-
-        binding.txtEditInputExample.setOnEditorActionListener((v, action, evt) -> {
-            em.input = binding.txtEditInputExample.getText().toString();
-            return false;
-        });
-        em.input = binding.txtEditInputExample.getText().toString();
+        registerOnTextChange(binding.txtEditPseudoCode, string -> em.pseudoCode = string);
+        registerOnTextChange(binding.txtEditCode, string -> em.code = string);
+        registerOnTextChange(binding.txtEditInputExample, string -> em.input = string);
 
         return binding.getRoot();
+    }
+
+    private void registerOnTextChange(EditText editText, Consumer<String> action) {
+        editText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                action.accept(s.toString());
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+            }
+        });
+        action.accept(editText.getText().toString());
     }
 }

@@ -1,13 +1,18 @@
 package de.sirvierl0ffel.viswiz.views.editing;
 
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
+
+import java.util.function.Consumer;
 
 import de.sirvierl0ffel.viswiz.databinding.FragmentEditingInformationBinding;
 import de.sirvierl0ffel.viswiz.models.Algorithm;
@@ -31,25 +36,29 @@ public class InformationFragment extends Fragment {
 
         EditViewModel em = new ViewModelProvider(requireActivity()).get(EditViewModel.class);
 
-        binding.txtEditName.setOnEditorActionListener((v, action, evt) -> {
-            em.name = binding.txtEditName.getText().toString();
-            return false;
-        });
-        em.name = binding.txtEditName.getText().toString();
-
-        binding.txtEditImgUrl.setOnEditorActionListener((v, action, evt) -> {
-            em.thumbnailURL = binding.txtEditImgUrl.getText().toString();
-            return false;
-        });
-        em.thumbnailURL = binding.txtEditImgUrl.getText().toString();
-
-        binding.txtEditDescription.setOnEditorActionListener((v, action, evt) -> {
-            em.description = binding.txtEditDescription.getText().toString();
-            return false;
-        });
-        em.description = binding.txtEditDescription.getText().toString();
+        registerOnTextChange(binding.txtEditName, string -> em.name = string);
+        registerOnTextChange(binding.txtEditImgUrl, string -> em.thumbnailURL = string);
+        registerOnTextChange(binding.txtEditDescription, string -> em.description = string);
 
         return binding.getRoot();
+    }
+
+    private void registerOnTextChange(EditText editText, Consumer<String> action) {
+        editText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                action.accept(s.toString());
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+            }
+        });
+        action.accept(editText.getText().toString());
     }
 
 }

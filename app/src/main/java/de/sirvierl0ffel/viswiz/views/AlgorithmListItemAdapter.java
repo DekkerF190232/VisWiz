@@ -1,9 +1,11 @@
 package de.sirvierl0ffel.viswiz.views;
 
+import android.content.DialogInterface;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.lifecycle.ViewModelStoreOwner;
 import androidx.recyclerview.widget.RecyclerView;
@@ -16,6 +18,7 @@ import de.sirvierl0ffel.viswiz.databinding.FragmentAlgorithmListItemBinding;
 import de.sirvierl0ffel.viswiz.models.Algorithm;
 import de.sirvierl0ffel.viswiz.viewmodels.AlgorithmViewModel;
 import de.sirvierl0ffel.viswiz.viewmodels.MainViewModel;
+import de.sirvierl0ffel.viswiz.views.editing.EditingFragment;
 import de.sirvierl0ffel.viswiz.views.running.RunningFragment;
 
 public class AlgorithmListItemAdapter extends RecyclerView.Adapter<AlgorithmListItemAdapter.ViewHolder> {
@@ -66,6 +69,27 @@ public class AlgorithmListItemAdapter extends RecyclerView.Adapter<AlgorithmList
                 algorithmModel.selectedInput.setValue(algorithm.defaultInput);
                 model.selectedAlgorithm.setValue(algorithm);
                 model.open(RunningFragment.class);
+            });
+
+            binding.btnAlgorithmDelete.setOnClickListener(v -> {
+                new AlertDialog.Builder(binding.getRoot().getContext())
+                        .setTitle("Delete Algorithm")
+                        .setMessage("Are you sure you want to delete this algorithm?")
+                        .setPositiveButton("Yes", (dialog, which) -> {
+                            // TODO: make request to server
+                            int position = algorithms.indexOf(algorithm);
+                            algorithms.remove(position);
+                            notifyItemRemoved(position);
+                            notifyItemRangeChanged(position, algorithms.size());
+                            Algorithm.DUMMY.remove(algorithm);
+                        })
+                        .setNegativeButton("No", null)
+                        .show();
+            });
+
+            binding.btnAlgorithmFork.setOnClickListener(v -> {
+                model.selectedAlgorithm.setValue(algorithm);
+                model.open(EditingFragment.class);
             });
         }
 

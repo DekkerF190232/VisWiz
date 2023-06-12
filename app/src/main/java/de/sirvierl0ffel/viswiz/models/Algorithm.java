@@ -1,12 +1,13 @@
 package de.sirvierl0ffel.viswiz.models;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
 public class Algorithm {
 
-    public static final List<Algorithm> DUMMY = Collections.singletonList(
-            new Algorithm(0, "Bubble Sort",
+    public static final List<Algorithm> DUMMY = new ArrayList<Algorithm>() {{
+            add(new Algorithm(0, "Bubble Sort",
                     "\\h{Input}\n" +
                             "\t\\a{A}: Array of unsorted numbers.\n" +
                             "\n" +
@@ -83,6 +84,7 @@ public class Algorithm {
                     },
                     new InputSave("let A = [3,5,8,2,6]"))
     );
+    }};
 
     public static Algorithm dummyGetAlgorithm(long id) {
         return DUMMY.get((int) id);

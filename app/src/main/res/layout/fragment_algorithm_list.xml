@@ -15,7 +15,8 @@
         android:layout_marginEnd="16dp"
         android:layout_marginBottom="10dp"
         android:clipToPadding="false"
-        android:paddingBottom="60dp"
+        android:paddingBottom="80dp"
+        android:scaleType="center"
         app:layoutManager="LinearLayoutManager"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -31,9 +32,12 @@
         android:layout_marginBottom="24dp"
         android:clickable="true"
         android:contentDescription="Add new Algorithm"
+        android:focusable="true"
         android:src="@drawable/icon_add_40"
+        app:tint="@android:color/white"
+        app:backgroundTint="?attr/colorPrimary"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        android:focusable="true" />
+        app:maxImageSize="46sp" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

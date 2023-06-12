@@ -15,10 +15,12 @@ import androidx.viewpager2.widget.ViewPager2;
 import com.google.android.material.tabs.TabLayout;
 
 import java.util.Objects;
+import java.util.concurrent.atomic.AtomicLong;
 
 import de.sirvierl0ffel.viswiz.databinding.FragmentEditingBinding;
 import de.sirvierl0ffel.viswiz.models.Algorithm;
 import de.sirvierl0ffel.viswiz.models.InputSave;
+import de.sirvierl0ffel.viswiz.viewmodels.AlgorithmViewModel;
 import de.sirvierl0ffel.viswiz.viewmodels.EditViewModel;
 import de.sirvierl0ffel.viswiz.viewmodels.MainViewModel;
 import de.sirvierl0ffel.viswiz.views.running.DescriptionFragment;
@@ -82,61 +84,72 @@ public class EditingFragment extends Fragment {
         editModel.selectTab((Class<? extends Fragment>) EditViewModel.TAB_FRAGMENT_TYPES[0]);
 
         binding.buttonEditSave.setOnClickListener(v -> {
-            // TODO binding.buttonEditSave
+            // TODO: Make request to server
+            Algorithm algorithm = buildAlgorithm();
+            if (algorithm == null) return;
+            algorithm.id = Algorithm.DUMMY.size();
+            Algorithm.DUMMY.add(algorithm);
+            requireActivity().getSupportFragmentManager().popBackStack();
         });
 
         binding.buttonEditTest.setOnClickListener(v -> {
-            EditViewModel em = new ViewModelProvider(requireActivity()).get(EditViewModel.class);
-
-            em.name = em.name.trim();
-            if (em.name.isEmpty()) {
-                Toast.makeText(requireActivity(), "Name cannot be empty!", Toast.LENGTH_LONG)
-                        .show();
-                return;
-            }
-
-            em.description = em.description.trim();
-            if (em.description.isEmpty()) {
-                Toast.makeText(requireActivity(), "Description cannot be empty!", Toast.LENGTH_LONG)
-                        .show();
-                return;
-            }
-
-            em.thumbnailURL = em.thumbnailURL.trim();
-            if (!em.thumbnailURL.contains(".")) {
-                Toast.makeText(requireActivity(), "Thumbnail URL is invalid!", Toast.LENGTH_LONG)
-                        .show();
-                return;
-            }
-
-            em.pseudoCode = em.pseudoCode.trim();
-            if (em.pseudoCode.isEmpty()) {
-                Toast.makeText(requireActivity(), "Pseudo code cannot be empty!", Toast.LENGTH_LONG)
-                        .show();
-                return;
-            }
-
-            em.code = em.code.trim();
-            if (em.code.isEmpty()) {
-                Toast.makeText(requireActivity(), "JavaScript code cannot be empty!", Toast.LENGTH_LONG)
-                        .show();
-                return;
-            }
-
-            em.input = em.input.trim();
-            if (em.input.isEmpty()) {
-                Toast.makeText(requireActivity(), "Example input cannot be empty!", Toast.LENGTH_LONG)
-                        .show();
-                return;
-            }
-
-            Algorithm algorithm = new Algorithm(-1, em.name, em.description, em.thumbnailURL, em.code, em.pseudoCode.split(System.lineSeparator()), new InputSave(em.input));
+            Algorithm algorithm = buildAlgorithm();
+            if (algorithm == null) return;
             MainViewModel m = new ViewModelProvider(requireActivity()).get(MainViewModel.class);
+            AlgorithmViewModel am = new ViewModelProvider(requireActivity()).get(AlgorithmViewModel.class);
             m.selectedAlgorithm.setValue(algorithm);
+            am.selectedInput.setValue(algorithm.defaultInput);
             m.open(RunningFragment.class);
         });
 
         return binding.getRoot();
+    }
+
+    private Algorithm buildAlgorithm() {
+        EditViewModel em = new ViewModelProvider(requireActivity()).get(EditViewModel.class);
+        em.name = em.name.trim();
+        if (em.name.isEmpty()) {
+            Toast.makeText(requireActivity(), "Name cannot be empty!", Toast.LENGTH_LONG)
+                    .show();
+            return null;
+        }
+
+        em.description = em.description.trim();
+        if (em.description.isEmpty()) {
+            Toast.makeText(requireActivity(), "Description cannot be empty!", Toast.LENGTH_LONG)
+                    .show();
+            return null;
+        }
+
+        em.thumbnailURL = em.thumbnailURL.trim();
+        if (!em.thumbnailURL.contains(".")) {
+            Toast.makeText(requireActivity(), "Thumbnail URL is invalid!", Toast.LENGTH_LONG)
+                    .show();
+            return null;
+        }
+
+        em.pseudoCode = em.pseudoCode.trim();
+        if (em.pseudoCode.isEmpty()) {
+            Toast.makeText(requireActivity(), "Pseudo code cannot be empty!", Toast.LENGTH_LONG)
+                    .show();
+            return null;
+        }
+
+        em.code = em.code.trim();
+        if (em.code.isEmpty()) {
+            Toast.makeText(requireActivity(), "JavaScript code cannot be empty!", Toast.LENGTH_LONG)
+                    .show();
+            return null;
+        }
+
+        em.input = em.input.trim();
+        if (em.input.isEmpty()) {
+            Toast.makeText(requireActivity(), "Example input cannot be empty!", Toast.LENGTH_LONG)
+                    .show();
+            return null;
+        }
+
+        return new Algorithm(-1, em.name, em.description, em.thumbnailURL, em.code, em.pseudoCode.split(System.lineSeparator()), new InputSave(em.input));
     }
 
 }

@@ -25,7 +25,7 @@
                 android:id="@+id/algorithm_item_title"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textSize="18sp"
+                android:textSize="20sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -34,13 +34,43 @@
                 android:id="@+id/algorithm_item_banner"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
-                android:layout_marginTop="5dp"
-                android:scaleType="centerCrop"
+                android:layout_marginTop="6dp"
                 android:background="@drawable/shape_round_image"
+                android:scaleType="centerCrop"
                 app:layout_constraintDimensionRatio="H,2:1"
                 app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/algorithm_item_title" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:gravity="right"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="1.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/algorithm_item_banner">
+
+
+                <Button
+                    android:id="@+id/btn_algorithm_delete"
+                    style="@style/Widget.Material3.Button.TonalButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="5dp"
+                    android:text="Delete" />
+
+                <Button
+                    android:id="@+id/btn_algorithm_fork"
+                    style="@style/Widget.Material3.Button.TonalButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="5dp"
+                    android:text="Fork" />
+
+            </LinearLayout>
 
             <!-- Buttons -->
 
