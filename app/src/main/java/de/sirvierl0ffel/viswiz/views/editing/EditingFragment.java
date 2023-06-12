@@ -12,14 +12,25 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.viewpager2.adapter.FragmentStateAdapter;
 import androidx.viewpager2.widget.ViewPager2;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.toolbox.Volley;
 import com.google.android.material.tabs.TabLayout;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
+import java.util.Collections;
+import java.util.List;
 import java.util.Objects;
+import java.util.Random;
 import java.util.concurrent.atomic.AtomicLong;
+import java.util.stream.Collectors;
 
 import de.sirvierl0ffel.viswiz.databinding.FragmentEditingBinding;
 import de.sirvierl0ffel.viswiz.models.Algorithm;
 import de.sirvierl0ffel.viswiz.models.InputSave;
+import de.sirvierl0ffel.viswiz.util.FileUtil;
+import de.sirvierl0ffel.viswiz.util.GsonRequest;
 import de.sirvierl0ffel.viswiz.viewmodels.AlgorithmViewModel;
 import de.sirvierl0ffel.viswiz.viewmodels.EditViewModel;
 import de.sirvierl0ffel.viswiz.viewmodels.MainViewModel;
@@ -84,12 +95,27 @@ public class EditingFragment extends Fragment {
         editModel.selectTab((Class<? extends Fragment>) EditViewModel.TAB_FRAGMENT_TYPES[0]);
 
         binding.buttonEditSave.setOnClickListener(v -> {
-            // TODO: Make request to server
             Algorithm algorithm = buildAlgorithm();
             if (algorithm == null) return;
-            algorithm.id = Algorithm.DUMMY.size();
-            Algorithm.DUMMY.add(algorithm);
-            requireActivity().getSupportFragmentManager().popBackStack();
+            RequestQueue volley = Volley.newRequestQueue(requireContext());
+            volley.add(new GsonRequest<>(Request.Method.POST, "http://10.0.2.2:8080/algorithm/new",
+                    new Gson().toJson(algorithm),
+                    new TypeToken<Long>() {
+                    },
+                    Collections.emptyMap(),
+                    success -> {
+                        // TODO: Test post method
+                        MainViewModel model = new ViewModelProvider(this).get(MainViewModel.class);
+                        algorithm.id = success;
+                        model.managerAlgorithms.getData().put(algorithm.id, algorithm);
+                        model.algorithmUpdate.setValue(Boolean.FALSE.equals(model.algorithmUpdate.getValue()));
+                        requireActivity().getSupportFragmentManager().popBackStack();
+                    },
+                    error -> {
+                        onRequestError();
+                        System.err.println("Error requesting algorithms! :(");
+                        error.printStackTrace();
+                    }));
         });
 
         binding.buttonEditTest.setOnClickListener(v -> {
@@ -103,6 +129,15 @@ public class EditingFragment extends Fragment {
         });
 
         return binding.getRoot();
+    }
+
+    private void onRequestError() {
+        MainViewModel model = new ViewModelProvider(requireActivity()).get(MainViewModel.class);
+        Algorithm algorithm = buildAlgorithm();
+        if (algorithm == null) return;
+        algorithm.id = model.managerAlgorithms.getData().size() + new Random().nextInt(1_000_000);
+        model.managerAlgorithms.getData().put(algorithm.id, algorithm);
+        requireActivity().getSupportFragmentManager().popBackStack();
     }
 
     private Algorithm buildAlgorithm() {

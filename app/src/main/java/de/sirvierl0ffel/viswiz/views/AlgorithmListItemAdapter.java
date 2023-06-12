@@ -6,16 +6,24 @@ import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.lifecycle.ViewModelStoreOwner;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.toolbox.Volley;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.squareup.picasso.Picasso;
 
+import java.util.Collections;
 import java.util.List;
 
 import de.sirvierl0ffel.viswiz.databinding.FragmentAlgorithmListItemBinding;
 import de.sirvierl0ffel.viswiz.models.Algorithm;
+import de.sirvierl0ffel.viswiz.util.GsonRequest;
 import de.sirvierl0ffel.viswiz.viewmodels.AlgorithmViewModel;
 import de.sirvierl0ffel.viswiz.viewmodels.MainViewModel;
 import de.sirvierl0ffel.viswiz.views.editing.EditingFragment;
@@ -24,7 +32,7 @@ import de.sirvierl0ffel.viswiz.views.running.RunningFragment;
 public class AlgorithmListItemAdapter extends RecyclerView.Adapter<AlgorithmListItemAdapter.ViewHolder> {
 
     private final ViewModelStoreOwner activity;
-    private final List<Algorithm> algorithms;
+    public final List<Algorithm> algorithms;
     private final MainViewModel model;
 
     public AlgorithmListItemAdapter(ViewModelStoreOwner activity, MainViewModel model, List<Algorithm> items) {
@@ -76,12 +84,25 @@ public class AlgorithmListItemAdapter extends RecyclerView.Adapter<AlgorithmList
                         .setTitle("Delete Algorithm")
                         .setMessage("Are you sure you want to delete this algorithm?")
                         .setPositiveButton("Yes", (dialog, which) -> {
-                            // TODO: make request to server
-                            int position = algorithms.indexOf(algorithm);
-                            algorithms.remove(position);
-                            notifyItemRemoved(position);
-                            notifyItemRangeChanged(position, algorithms.size());
-                            Algorithm.DUMMY.remove(algorithm);
+                            RequestQueue volley = Volley.newRequestQueue((AppCompatActivity) activity);
+                            volley.add(new GsonRequest<>(Request.Method.POST, "http://10.0.2.2:8080/algorithm/new",
+                                    new Gson().toJson(algorithm),
+                                    new TypeToken<Long>() {
+                                    },
+                                    Collections.emptyMap(),
+                                    success -> {
+                                        // TODO: Test delete request to server
+                                        int position = algorithms.indexOf(algorithm);
+                                        algorithms.remove(position);
+                                        notifyItemRemoved(position);
+                                        notifyItemRangeChanged(position, algorithms.size());
+                                        model.managerAlgorithms.getData().remove(algorithm.id);
+                                    },
+                                    error -> {
+                                        onDeleteError();
+                                        System.err.println("Error requesting algorithms! :(");
+                                        error.printStackTrace();
+                                    }));
                         })
                         .setNegativeButton("No", null)
                         .show();
@@ -91,6 +112,14 @@ public class AlgorithmListItemAdapter extends RecyclerView.Adapter<AlgorithmList
                 model.selectedAlgorithm.setValue(algorithm);
                 model.open(EditingFragment.class);
             });
+        }
+
+        private void onDeleteError() {
+            int position = algorithms.indexOf(algorithm);
+            algorithms.remove(position);
+            notifyItemRemoved(position);
+            notifyItemRangeChanged(position, algorithms.size());
+            model.managerAlgorithms.getData().remove(algorithm.id);
         }
 
     }

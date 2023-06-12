@@ -1,5 +1,6 @@
 package de.sirvierl0ffel.viswiz.views;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -11,6 +12,9 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
+import java.util.ArrayList;
+import java.util.Objects;
 
 import de.sirvierl0ffel.viswiz.databinding.FragmentAlgorithmListBinding;
 import de.sirvierl0ffel.viswiz.models.Algorithm;
@@ -43,6 +47,7 @@ public class AlgorithmListFragment extends Fragment {
         }
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -56,11 +61,19 @@ public class AlgorithmListFragment extends Fragment {
             view.setLayoutManager(new GridLayoutManager(context, mColumnCount));
         }
         MainViewModel model = new ViewModelProvider(requireActivity()).get(MainViewModel.class);
-        view.setAdapter(new AlgorithmListItemAdapter(requireActivity(), model, Algorithm.DUMMY));
+
+        AlgorithmListItemAdapter adapter;
+        view.setAdapter(adapter = new AlgorithmListItemAdapter(requireActivity(), model, new ArrayList<>(model.managerAlgorithms.getData().values())));
 
         binding.buttonNewAlgorithm.setOnClickListener(v -> {
             model.selectedAlgorithm.setValue(null);
             model.open(EditingFragment.class);
+        });
+
+        model.algorithmUpdate.observe(getViewLifecycleOwner(), b -> {
+            Objects.requireNonNull(view.getAdapter()).notifyDataSetChanged();
+            adapter.algorithms.clear();
+            adapter.algorithms.addAll(model.managerAlgorithms.getData().values());
         });
 
         return binding.getRoot();
