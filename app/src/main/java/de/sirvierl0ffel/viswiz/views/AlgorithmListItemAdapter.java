@@ -1,6 +1,5 @@
 package de.sirvierl0ffel.viswiz.views;
 
-import android.content.DialogInterface;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
@@ -85,13 +84,11 @@ public class AlgorithmListItemAdapter extends RecyclerView.Adapter<AlgorithmList
                         .setMessage("Are you sure you want to delete this algorithm?")
                         .setPositiveButton("Yes", (dialog, which) -> {
                             RequestQueue volley = Volley.newRequestQueue((AppCompatActivity) activity);
-                            volley.add(new GsonRequest<>(Request.Method.POST, "http://10.0.2.2:8080/algorithm/new",
-                                    new Gson().toJson(algorithm),
-                                    new TypeToken<Long>() {
+                            volley.add(new GsonRequest<>(Request.Method.DELETE, "http://10.0.2.2:8080/algorithm/delete/" + algorithm.id,
+                                    new TypeToken<String>() {
                                     },
                                     Collections.emptyMap(),
                                     success -> {
-                                        // TODO: Test delete request to server
                                         int position = algorithms.indexOf(algorithm);
                                         algorithms.remove(position);
                                         notifyItemRemoved(position);

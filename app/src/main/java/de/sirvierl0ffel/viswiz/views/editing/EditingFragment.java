@@ -17,6 +17,7 @@ import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.Volley;
 import com.google.android.material.tabs.TabLayout;
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 
 import java.util.Collections;
@@ -98,6 +99,7 @@ public class EditingFragment extends Fragment {
             Algorithm algorithm = buildAlgorithm();
             if (algorithm == null) return;
             RequestQueue volley = Volley.newRequestQueue(requireContext());
+            System.out.println(new GsonBuilder().setPrettyPrinting().create().toJson(algorithm));
             volley.add(new GsonRequest<>(Request.Method.POST, "http://10.0.2.2:8080/algorithm/new",
                     new Gson().toJson(algorithm),
                     new TypeToken<Long>() {
